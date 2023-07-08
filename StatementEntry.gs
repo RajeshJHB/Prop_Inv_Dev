@@ -18,7 +18,7 @@ function getSpecificPropSheet(theProp){
 }
 
 
-function statementSheet(){
+function makeSTSheet(){
   ss = SpreadsheetApp.getActiveSpreadsheet();
   var statementSheet = ss.getSheetByName("Statement")
   if (statementSheet == null){
@@ -76,6 +76,16 @@ function statementSheet(){
   statementSheet.getRange(10,1,1,1).setValue(invList[0])
 }
 
+function sortSTByDate() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getRange('C7:H7').activate();
+  var currentCell = spreadsheet.getCurrentCell();
+  spreadsheet.getSelection().getNextDataRange(SpreadsheetApp.Direction.DOWN).activate();
+  currentCell.activateAsCurrentCell();
+  spreadsheet.getActiveRange().offset(1, 0, spreadsheet.getActiveRange().getNumRows() - 1).sort({column: 3, ascending: true});
+  spreadsheet.getRange('C7').activate();
+};
+
 function makeStatement(){
   ss = SpreadsheetApp.getActiveSpreadsheet();
   statementSheet = ss.getSheetByName("Statement")
@@ -115,8 +125,11 @@ function makeStatement(){
         getInvoiceDrCr(i)
       }
     }
+    sortSTByDate()
   }
-  statementText = [["", "", "","",""]]
+
+  /*
+  statementText = [["", "", "","","",""]]
   statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
   printRowNum++
  
@@ -125,6 +138,7 @@ function makeStatement(){
   printRowNum++
   statementText = [["", "BALANCE", drTotal-crTotal,"",""]]
   statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+  */
 }
 
 function getInvoiceDrCr(invIndex)
@@ -140,38 +154,40 @@ function getInvoiceDrCr(invIndex)
   if (firstInv){
     var now  = new Date()
 
-    statementText = [["", "STATEMENT", "",now,""]]
-    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+    statementText = [["", "STATEMENT", "",now,"",""]]
+    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
     printRowNum++
 
-    statementText = [["Property Code", propSheetData[minus1+11][invIndex], "","",""]]
-    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+    statementText = [["Property Code", propSheetData[minus1+11][invIndex], "","","",""]]
+    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
     printRowNum++
 
-    statementText = [["Occupant", propSheetData[minus1+14][invIndex], "","",""]]
-    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+    statementText = [["Occupant", propSheetData[minus1+14][invIndex], "","","",""]]
+    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
     printRowNum++
-    statementText = [["", "", "","",""]]
-    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+    statementText = [["", "", "","","",""]]
+    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
     printRowNum++
-    statementText = [["Date", "Description", "Debit","Credit","Notes"]]
-    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+    statementText = [["Date", "Description", "Debit","Credit","Balance","Notes"]]
+    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
     printRowNum++
     statementText = [[propSheetData[minus1+2][invIndex],
                   "Previous Balance Inv: " +propSheetData[minus1+5][invIndex],
                   propSheetData[minus1+7][invIndex],
                   "",
+                  propSheetData[minus1+7][invIndex],
                   ""]]
     drTotal = drTotal + propSheetData[minus1+7][invIndex]
-    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+    statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
     printRowNum++
   }
   statementText = [[propSheetData[minus1+20][invIndex],
                   "Invoice : " +propSheetData[minus1+23][invIndex],
                   "",
                   "",
+                  "=G"+(printRowNum+1)+("+E"+(printRowNum+2))+("-F"+(printRowNum+2)),
                   ""]]
-  statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+  statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
   printRowNum++
 
   // Do Utils
@@ -184,8 +200,9 @@ function getInvoiceDrCr(invIndex)
                       propSheetData[minus1+30+offset][invIndex] + " " + propSheetData[minus1+31][invIndex],
                       propSheetData[minus1+36+offset][invIndex],
                       "",
+                      "=G"+(printRowNum+1)+("+E"+(printRowNum+2))+("-F"+(printRowNum+2)),
                       ""]]
-      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
       printRowNum++
       drTotal = drTotal + propSheetData[minus1+36+offset][invIndex]
     }
@@ -198,8 +215,9 @@ function getInvoiceDrCr(invIndex)
                       propSheetData[minus1+58+offset][invIndex],
                       propSheetData[minus1+59+offset][invIndex],
                       "",
+                      "=G"+(printRowNum+1)+("+E"+(printRowNum+2))+("-F"+(printRowNum+2)),
                       propSheetData[minus1+60+offset][invIndex]]]
-      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
       printRowNum++
       drTotal = drTotal + propSheetData[minus1+59+offset][invIndex]
     }
@@ -209,8 +227,9 @@ function getInvoiceDrCr(invIndex)
                       propSheetData[minus1+58+offset][invIndex],
                       "",
                       propSheetData[minus1+59+offset][invIndex],
+                      "=G"+(printRowNum+1)+("+E"+(printRowNum+2))+("-F"+(printRowNum+2)),
                       propSheetData[minus1+60+offset][invIndex]]]
-      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
       printRowNum++
       crTotal = crTotal + propSheetData[minus1+59+offset][invIndex]
     }
@@ -220,8 +239,9 @@ function getInvoiceDrCr(invIndex)
                       propSheetData[minus1+58+offset][invIndex],
                       "",
                       "",
+                      "=G"+(printRowNum+1)+("+E"+(printRowNum+2))+("-F"+(printRowNum+2)),
                       propSheetData[minus1+60+offset][invIndex]]]
-      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,5).setValues(statementText)
+      statementSheet.getRange(prnStRow + printRowNum,prnStCol,1,6).setValues(statementText)
       printRowNum++
     }
     else{
