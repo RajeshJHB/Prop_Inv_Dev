@@ -24,4 +24,3 @@ function clearInvoice() {
   var invSheet = SpreadsheetApp.getActive().getSheetByName("Invoice");
   invSheet.getRangeList(["B3:B7","C8:C15","D9:D13","E4:E16","B18:E29","E30","C34:C39"]).clearContent()  // last Invoice
 }
-

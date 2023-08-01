@@ -58,6 +58,7 @@ function makeSTSheet(){
   statementSheet.getRange("A2").setNote("Statement For Which Roperty")
   statementSheet.getRange("A7").setNote("Statement Start Invoice")
   statementSheet.getRange("A10").setNote("Statement End Value")
+  statementSheet.getRange("C:H").setNumberFormat("0.00");
  }
 
  function populateInvNumber(aProp){
@@ -75,6 +76,14 @@ function makeSTSheet(){
   statementSheet.getRange(7,1,1,1).setValue(invList[0])
   statementSheet.getRange(10,1,1,1).setValue(invList[0])
 }
+
+function clearStatement() {
+  var stmSheet = SpreadsheetApp.getActive().getSheetByName("Statement");
+  stmSheet.getRangeList(["A2","A7","A10","C:H"]).clearContent()  // last
+  stmSheet.getRangeList(["C:H"]).setNumberFormat("0.00");
+}
+
+
 
 function sortSTByDate() {
   var spreadsheet = SpreadsheetApp.getActive();
@@ -125,7 +134,7 @@ function makeStatement(){
         getInvoiceDrCr(i)
       }
     }
-    sortSTByDate()
+ //   sortSTByDate()
   }
 
   /*
@@ -249,6 +258,5 @@ function getInvoiceDrCr(invIndex)
     }
   }
 }
-
 
 

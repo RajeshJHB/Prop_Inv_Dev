@@ -69,7 +69,7 @@ function onEdit(e) {
       return
     }
     else if (range.getA1Notation() == "B2"){    // Change Property
-      menuOne()
+      if (menuNum != 1) { menuOne()}
       loadUp()  // BaseToEntry
       return
   //    range.getSheet().getRange(3,5,1,1).setValue("Temp")
@@ -87,6 +87,7 @@ function onEdit(e) {
    if (range.getA1Notation() == "A2"){
     var myProp = range.getSheet().getRange(2,1,1,1).getValue()
     populateInvNumber(myProp)
+    if (menuNum != 3) { menuThree()}
    // range.setNote("Back Groung Script is Running Statement :- Date " + new Date + "Prop " + myProp);
    }
   }
@@ -159,5 +160,4 @@ function onEdit(e) {
 }
 
 */
-
 

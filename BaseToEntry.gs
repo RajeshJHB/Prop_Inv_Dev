@@ -204,7 +204,7 @@ function editEntry(){
   buildMainPickList() //MakeEntrySheet
   makeAllPickList() //BaseToEntry
   fixUtilValues()
-  menuOne()
+  if (menuNum != 1) { menuOne()}
  
 }
 
@@ -225,7 +225,7 @@ function getPickInvoice(){
 //  fixUtilValues()
   getInvNumbers()
   writeSaved(true)
-  menuTwo()
+  if (menuNum != 2) { menuTwo()}
 }
 
 
@@ -301,6 +301,5 @@ function getInvNumbers(){
   }
   entrySheet.getRange(14,9,1,1).setValue(invList[0])
 }
-
 
 

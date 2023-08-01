@@ -15,7 +15,7 @@ function packPutFullEntryData(wrtIndex){
   if (colIndex < 2){
     initializeTable() // that writes to column 1 with headings
     wrtIndex = 2  //data now in colum 2
-  } 
+  }
   /*
   if (colIndex > 1) {
     currInvNumber = entrySheetData[2][4]
@@ -51,7 +51,7 @@ function packPutFullEntryData(wrtIndex){
 
 function findInvIndex(){
   getPropSheet()
-  var colIndex = getPropSheetLastDataCol() 
+  var colIndex = getPropSheetLastDataCol()
   if (colIndex == 0){ // no data in sheet to get last invoice
     return(1)
   }
@@ -98,4 +98,3 @@ function initializeTable(){
   propSheet.getRange(1,1,126,1).setValues(dEntry2D)
 
 }
-
