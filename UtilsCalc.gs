@@ -188,4 +188,3 @@ var cost = 0;
   }
   return cost*100;
 }
-
